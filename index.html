@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Document</title>
+  </head>
+  <style>
+    body {
+      background-image: linear-gradient(to top right, #000000, #ec4899);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: monospace;
+      overflow-x: hidden;
+    }
+    h1 {
+      font-size: 1.6rem;
+      color: #000000;
+      text-align: center;
+      margin: 0;
+      padding-bottom: 20px;
+    }
+
+    .slider {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      height: 370px;
+      overflow: visible;
+      padding: 0 20px;
+      text-align: justify;
+    }
+
+    .item {
+      position: absolute;
+      width: 220px;
+      height: 320px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      transition: 0.5s;
+      left: calc(50% - 110px);
+      top: 25px;
+      box-shadow: 0 0 15px #ec4899, 0 0 30px #8b5cf6;
+      animation: neonGlow 2s infinite alternate;
+    }
+
+    #next,
+    #prev {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      font-size: 2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    #prev {
+      left: 10px;
+    }
+    #next {
+      right: 10px;
+    }
+    img {
+      padding-top: 30px;
+      width: 100%;
+      height: 70%;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .slider {
+        height: 300px;
+      }
+
+      .item {
+        width: 180px;
+        height: 260px;
+        left: calc(50% - 90px);
+        padding: 15px;
+        top: 20px;
+      }
+
+      #next,
+      #prev {
+        font-size: 1.5rem;
+        width: 35px;
+        height: 35px;
+      }
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #ff4081;
+      pointer-events: none;
+      animation: float 4s linear infinite;
+      transform: rotate(-45deg); /* Rotación base corregida */
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #ff4081;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 10px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(-45deg); /* Mantener la rotación correcta */
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(-45deg); /* Rotación consistente */
+        opacity: 0;
+      }
+    }
+  </style>
+  <body>
+    <div class="slider">
+      <div class="item">
+        <h1>Mi Faro en la Tormenta</h1>
+        Mamá, tu amor es el faro que siempre me guía, incluso en la oscuridad.
+        En tus abrazos encuentro la paz y en tus palabras, la sabiduría. Gracias
+        por ser mi roca, mi confidente y mi mayor inspiración. Te quiero más de
+        lo que las palabras pueden expresar.
+      </div>
+      <div class="item">
+        <h1>Mi ejemplo a seguir</h1>
+        Eres la persona más increíble que conozco, mamá. Tu fuerza, tu cariño y
+        tu dedicación son un ejemplo para mí cada día. Gracias por enseñarme el
+        valor de la perseverancia y la importancia de amar con todo el corazón.
+        Eres un regalo invaluable en mi vida.
+      </div>
+      <div class="item">
+        <h1></h1>
+        <img src="img/11.png" alt="" />
+      </div>
+      <div class="item">
+        <h1>Tesoros del corazón</h1>
+        Mamá, cada recuerdo contigo es un tesoro que guardo en lo más profundo
+        de mi corazón. Tus risas, tus consejos y tu amor incondicional son la
+        base de mi felicidad. Gracias por ser la mejor madre del mundo. Te
+        adoro.
+      </div>
+      <div class="item">
+        <h1></h1>
+        <img src="img/Ma.jpg" alt="" />
+      </div>
+      <div class="item">
+        <h1>Alas para volar</h1>
+        En cada logro y en cada desafío, tu apoyo incondicional ha sido mi mayor
+        fortaleza, mamá. Tu fe en mí me impulsa a seguir adelante. Gracias por
+        creer siempre y por estar a mi lado. Eres mi heroína.
+      </div>
+
+      <div class="item">
+        <h1>Jardin de Amor</h1>
+        Mamá, tu amor es como un jardín que florece en mi alma, llenándolo de
+        alegría y esperanza. Gracias por nutrirme con tu cariño y por enseñarme
+        la belleza de la vida. Eres mi mayor bendición.
+      </div>
+
+      <button id="next">></button>
+      <button id="prev"><</button>
+    </div>
+
+    <script>
+      let items = document.querySelectorAll(".slider .item");
+      let next = document.getElementById("next");
+      let prev = document.getElementById("prev");
+
+      let active = 3;
+      const mobileBreakpoint = 480;
+
+      function calculateTranslateValue() {
+        return window.innerWidth <= mobileBreakpoint ? 80 : 120;
+      }
+
+      function loadShow() {
+        let stt = 0;
+        const translateValue = calculateTranslateValue();
+
+        items[active].style.transform = `none`;
+        items[active].style.zIndex = 1;
+        items[active].style.filter = "none";
+        items[active].style.opacity = 1;
+
+        for (let i = active + 1; i < items.length; i++) {
+          stt++;
+          items[i].style.transform = `translateX(${
+            translateValue * stt
+          }px) scale(${1 - 0.2 * stt})`;
+          items[i].style.zIndex = -stt;
+          items[i].style.filter = "blur(2px)";
+          items[i].style.opacity = stt > 2 ? 0 : 0.6;
+        }
+
+        stt = 0;
+        for (let i = active - 1; i >= 0; i--) {
+          stt++;
+          items[i].style.transform = `translateX(${
+            -translateValue * stt
+          }px) scale(${1 - 0.2 * stt})`;
+          items[i].style.zIndex = -stt;
+          items[i].style.filter = "blur(2px)";
+          items[i].style.opacity = stt > 2 ? 0 : 0.6;
+        }
+      }
+
+      window.addEventListener("resize", loadShow);
+
+      loadShow();
+      next.onclick = function () {
+        active = active + 1 < items.length ? active + 1 : active;
+        loadShow();
+      };
+      prev.onclick = function () {
+        active = active - 1 >= 0 ? active - 1 : active;
+        loadShow();
+      };
+
+      function createHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+          heart.remove();
+        }, 5000);
+      }
+
+      setInterval(createHeart, 300);
+    </script>
+  </body>
+</html>
